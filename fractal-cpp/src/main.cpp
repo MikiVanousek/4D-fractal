@@ -6,11 +6,17 @@
 #include <iostream>
 #include <fstream>
 
+#include <cassert>
+
 #include <GL/glew.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <linmath.h>
 
+const int RESOLUTION_X = 1000;
+const int RESOLUTION_Y = 500;
+
+unsigned int program;
 
 static void ErrorCallback(int error, const char* description) {
     fprintf(stderr, "Error: %s\n", description);
@@ -63,7 +69,7 @@ static unsigned int CompileShader(const std::string& source, unsigned int type) 
         char* message = (char*)alloca(length * sizeof(char));
         glGetShaderInfoLog(id, length, &length, message);
 
-        printf("%s attaching failed!\n", shaderTypeName);
+        printf("%s attachment failed!\n", shaderTypeName);
         std::cout << message << std::endl;
 
         glDeleteShader(id);
@@ -75,8 +81,8 @@ static unsigned int CompileShader(const std::string& source, unsigned int type) 
     return id;
 }
 
-static int AttachShaders() {
-    unsigned int program = glCreateProgram();
+static void AttachShaders() {
+    program = glCreateProgram();
 
     std::string vertShaderStr = ReadFile("src/vs.shader");
     std::string fragShaderStr = ReadFile("src/fr.shader");
@@ -95,7 +101,13 @@ static int AttachShaders() {
     glDeleteShader(vs);
     glDeleteShader(fs);
 
-    return program;
+    glUseProgram(program);
+}
+
+void SetUniformArguments() {
+    int location = glGetUniformLocation(program, "screenResolution");
+    assert(location != -1);
+    glUniform2f(location, (float)RESOLUTION_X, (float)RESOLUTION_Y);
 }
 
 int main(void)
@@ -108,7 +120,7 @@ int main(void)
     }
    
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(RESOLUTION_X, RESOLUTION_Y, "Hello World", NULL, NULL);
 
     /* Seting up callbacks */
     glfwSetErrorCallback(ErrorCallback);
@@ -138,8 +150,9 @@ int main(void)
 
 
     glfwSwapInterval(1);
-    unsigned int shader = AttachShaders();
-    glUseProgram(shader);
+
+    AttachShaders();
+    SetUniformArguments();
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -162,23 +175,3 @@ int main(void)
     glfwTerminate();
     return 0;
 }
-
-
-/* This code draws a triangle with openGl. It is now obsolete, but I keep it here in case I ever need it.
-float positions[6] = {
-    0.0f, -1.0f,
-
-    1.0f, 0.0f,
-    1.0f, 0.5f
-};
-
-
-unsigned int buffer;
-glGenBuffers(1, &buffer);
-glBindBuffer(GL_ARRAY_BUFFER, buffer);
-glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
-
-glEnableVertexAttribArray(0);
-
-glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float)*2, (const void*)8);
-*/
