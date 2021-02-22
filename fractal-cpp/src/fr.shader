@@ -1,7 +1,7 @@
-#version 400
-
+#version 330 core
 out vec4 color;
 
-void main{
-	color = vec4(0.5, 0.5, 1.0, 1.0);
-}
+void main()
+{
+    color = vec4(1.0, 0.0, 0.0, 1.0);
+};
