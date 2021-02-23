@@ -11,24 +11,27 @@
 #include <GL/glew.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
-#include <linmath.h>
 
-int RESOLUTION_X = 1000;
-int RESOLUTION_Y = 500;
+#include <linmath.h>
+#include <math.h>
+
+int resolutionX = 1000;
+int resolutionY = 500;
 
 unsigned int program;
 
 /* The center of the fractal. x, y, ca, cb */
-float center[4] = { 0.0f, 0.0f, 0.5f, 0.0f };
+double center[4] = { 0.0, 0.0, 0.0, 0.0 };
 float currentMovementSpeed[4] = { 0.0f, 0.0f , 0.0f, 0.0f };
 
-float zoom = 1.0f;
+double zoom = 1.0;
 float currentZoomSpeed = 0.0f;
 
-float rotation[2] = { 0.0f, 0.0f };
+float rotation[2] = { 3.14 /2, 3.14 / 2 } ;
+//float rotation[2] = { 0.0, 0.0};
 float currentRotationSpeed[2] = { 0.0f, 0.0f };
 
-const float MOVEMENT_SPEED[4] = { 0.5f, 0.5f, 0.05f, 0.05f };
+const float MOVEMENT_SPEED[4] = { 0.5f, 0.5f, 0.1f, 0.1f };
 const float ZOOM_SPEED = 1.5f;
 const float ROTATION_SPEED = 0.5f;
 
@@ -39,11 +42,11 @@ void UpdateUniformArguments() {
 
     location = glGetUniformLocation(program, "center");
     assert(location != -1);
-    glUniform4f(location, center[0], center[1], center[2], center[3]);
+    glUniform4d(location, center[0], center[1], center[2], center[3]);
 
     location = glGetUniformLocation(program, "zoom");
     assert(location != -1);
-    glUniform1f(location, zoom);
+    glUniform1d(location, zoom);
 
     location = glGetUniformLocation(program, "rotation");
     assert(location != -1);
@@ -53,7 +56,7 @@ void UpdateUniformArguments() {
 void SetupUniformArguments() {
     int location = glGetUniformLocation(program, "screenResolution");
     assert(location != -1);
-    glUniform2f(location, (float)RESOLUTION_X, (float)RESOLUTION_Y);
+    glUniform2f(location, (float)resolutionX, (float)resolutionY);
 
     UpdateUniformArguments();
 }
@@ -134,6 +137,7 @@ static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, i
         }
        
         printf("Key pressed: %d\n", key);
+        printf("Zoom: %d\n", zoom);
     }
 }
 
@@ -152,6 +156,7 @@ static void Update() {
     }
 
     zoom *= pow(2, deltaT * currentZoomSpeed);
+    printf("Zoom: %d\n", zoom);
 
     UpdateUniformArguments();
 }
@@ -243,9 +248,9 @@ int main(void)
     /* Create a windowed mode window and its OpenGL context */
  
     const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-    RESOLUTION_X = mode->width;
-    RESOLUTION_Y = mode->height;
-    window = glfwCreateWindow(RESOLUTION_X, RESOLUTION_Y, "Fractal Renderer", glfwGetPrimaryMonitor(), NULL);
+    resolutionX = mode->width;
+    resolutionY = mode->height;
+    window = glfwCreateWindow(resolutionX, resolutionY, "Fractal Renderer", glfwGetPrimaryMonitor(), NULL);
 
     /* Seting up callbacks */
     glfwSetErrorCallback(ErrorCallback);
