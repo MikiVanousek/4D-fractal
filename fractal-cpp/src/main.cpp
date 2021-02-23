@@ -19,27 +19,35 @@ int RESOLUTION_Y = 500;
 unsigned int program;
 
 /* The center of the fractal. x, y, ca, cb */
-float position[4] = { 0.0f, 0.0f, 0.5f, 0.0f };
-float speed[4] = { 0.0f, 0.0f , 0.0f, 0.0f };
+float center[4] = { 0.0f, 0.0f, 0.5f, 0.0f };
+float currentMovementSpeed[4] = { 0.0f, 0.0f , 0.0f, 0.0f };
 
 float zoom = 1.0f;
-float zoomSpeed = 0.0f;
+float currentZoomSpeed = 0.0f;
 
-const float MOVEMENT_SPEED[4] = { 0.5f, 0.5f, 0.1f, 0.1f };
-const float ZOOM_SPEED = 1.5F;
+float rotation[2] = { 0.0f, 0.0f };
+float currentRotationSpeed[2] = { 0.0f, 0.0f };
+
+const float MOVEMENT_SPEED[4] = { 0.5f, 0.5f, 0.05f, 0.05f };
+const float ZOOM_SPEED = 1.5f;
+const float ROTATION_SPEED = 0.5f;
 
 double lastTime;
 
 void UpdateUniformArguments() {
     int location;
 
-    location = glGetUniformLocation(program, "position");
+    location = glGetUniformLocation(program, "center");
     assert(location != -1);
-    glUniform4f(location, position[0], position[1], position[2], position[3]);
+    glUniform4f(location, center[0], center[1], center[2], center[3]);
 
     location = glGetUniformLocation(program, "zoom");
     assert(location != -1);
     glUniform1f(location, zoom);
+
+    location = glGetUniformLocation(program, "rotation");
+    assert(location != -1);
+    glUniform2f(location, rotation[0], rotation[1]);
 }
 
 void SetupUniformArguments() {
@@ -64,9 +72,15 @@ static float getDir(int action, bool positiveDir) {
 }
 
 static void UpdateMovementSpeed(int index, int action, bool positiveDir) {
-    speed[index] += getDir(action, positiveDir) * MOVEMENT_SPEED[index];
+    currentMovementSpeed[index] += getDir(action, positiveDir) * MOVEMENT_SPEED[index];
 
-    printf("Speed updated: %.1f\t%.1f\t%.1f\t%.1f\n", speed[0], speed[1], speed[2], speed[3]);
+    printf("Movement speed updated: %.1f\t%.1f\t%.1f\t%.1f\n", currentMovementSpeed[0], currentMovementSpeed[1], currentMovementSpeed[2], currentMovementSpeed[3]);
+}
+
+static void UpdateRotationSpeed(int index, int action, bool positiveDir) {
+    currentRotationSpeed[index] += getDir(action, positiveDir) * ROTATION_SPEED;
+
+    printf("Rotation speed updated: %.1f\t%.1f\n", currentRotationSpeed[0], currentRotationSpeed[1]);
 }
 
 static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -74,16 +88,16 @@ static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, i
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     if (action == GLFW_PRESS || action == GLFW_RELEASE) {
         switch (key) {
-        case GLFW_KEY_A:
+        case GLFW_KEY_D:
             UpdateMovementSpeed(0, action, true);
             break;
-        case GLFW_KEY_D:
+        case GLFW_KEY_A:
             UpdateMovementSpeed(0, action, false);
             break;
-        case GLFW_KEY_S:
+        case GLFW_KEY_W:
             UpdateMovementSpeed(1, action, true);
             break;
-        case GLFW_KEY_W:
+        case GLFW_KEY_S:
             UpdateMovementSpeed(1, action, false);
             break;
         case GLFW_KEY_R:
@@ -98,11 +112,24 @@ static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, i
         case GLFW_KEY_G:
             UpdateMovementSpeed(3, action, false);
             break;
+        case GLFW_KEY_Y:
+            UpdateRotationSpeed(0, action, true);
+            break;
+        case GLFW_KEY_H:
+            UpdateRotationSpeed(0, action, false);
+            break;
+        case GLFW_KEY_U:
+            UpdateRotationSpeed(1, action, true);
+            break;
+        case GLFW_KEY_J:
+            UpdateRotationSpeed(1, action, false);
+            break;
+
         case GLFW_KEY_LEFT_SHIFT:
-            zoomSpeed += ZOOM_SPEED * getDir(action, true);
+            currentZoomSpeed += ZOOM_SPEED * getDir(action, true);
             break;
         case GLFW_KEY_LEFT_CONTROL:
-            zoomSpeed += ZOOM_SPEED * getDir(action, false);
+            currentZoomSpeed += ZOOM_SPEED * getDir(action, false);
             break;
         }
        
@@ -117,10 +144,14 @@ static void Update() {
     lastTime = glfwGetTime();
 
     for (int i = 0; i < 4; i++) {
-        position[i] += deltaT * speed[i] / zoom;
+        center[i] += deltaT * currentMovementSpeed[i] / zoom;
     }
 
-    zoom *= pow(2, deltaT * zoomSpeed);
+    for (int i = 0; i < 2; i++) {
+        rotation[i] += deltaT * currentRotationSpeed[i] / zoom;
+    }
+
+    zoom *= pow(2, deltaT * currentZoomSpeed);
 
     UpdateUniformArguments();
 }
