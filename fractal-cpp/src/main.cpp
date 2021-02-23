@@ -13,8 +13,8 @@
 #include <GLFW/glfw3.h>
 #include <linmath.h>
 
-const int RESOLUTION_X = 1000;
-const int RESOLUTION_Y = 500;
+int RESOLUTION_X = 1000;
+int RESOLUTION_Y = 500;
 
 unsigned int program;
 
@@ -189,7 +189,11 @@ int main(void)
     }
    
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(RESOLUTION_X, RESOLUTION_Y, "Fractal Renderer", NULL, NULL);
+ 
+    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    RESOLUTION_X = mode->width;
+    RESOLUTION_Y = mode->height;
+    window = glfwCreateWindow(RESOLUTION_X, RESOLUTION_Y, "Fractal Renderer", glfwGetPrimaryMonitor(), NULL);
 
     /* Seting up callbacks */
     glfwSetErrorCallback(ErrorCallback);
