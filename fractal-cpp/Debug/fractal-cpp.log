@@ -1,4 +1,8 @@
 ﻿  main.cpp
 C:\Projects\fractal-cpp\fractal-cpp\dependencies\linmath\linmath.h(583,18): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 C:\Projects\fractal-cpp\fractal-cpp\dependencies\linmath\linmath.h(590,18): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(101,49): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Projects\fractal-cpp\fractal-cpp\Debug\vc120.pdb'; linking object as if no debug info
   fractal-cpp.vcxproj -> C:\Projects\fractal-cpp\fractal-cpp\Debug\fractal-cpp.exe

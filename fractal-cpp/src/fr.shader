@@ -4,29 +4,35 @@ out vec4 color;
 in vec4 gl_FragCoord;
 
 uniform vec2 screenResolution;
-float ca = 0.5;
-float cb = 0.3;
+uniform float zoom;
+/* The center of the fractal. x, y, ca, cb */
+uniform vec4 position; 
 
-const float treashold = 1000000000;
-const int iter = 10;
+const float treashold = 100000000000000000.0f;
+const int maxIter = 64;
+const float maxIterInverse = 1.0f/maxIter;
 
 vec2 adjust = 2.0f * vec2(1.0f) / screenResolution;
 
 
 vec2 adjustCoords() {
-    return gl_FragCoord.xy * adjust - 1;
+    return gl_FragCoord.xy * adjust - 1 - position.xy;
 }
 
+vec4 pallete(int iter) {
+    float scale = (maxIter - iter) * maxIterInverse;
+    return vec4(vec3(1.0f) * scale, 1.0);
+}
 vec2 pow2(vec2 a) {
-    return vec2((a.x * a.x - a.y * a.y + ca), (2 * a.x * a.y) + cb);
+    return vec2((a.x * a.x - a.y * a.y + position[2]), (2 * a.x * a.y) + position[3]);
 }
 void main(){
     vec2 adjust = vec2(1.0f / screenResolution.x, 1.0f / screenResolution.y);
     vec2 coords = adjustCoords();
-    for (int i = 0; i < iter; i++) {
+    for (int i = 0; i < maxIter; i++) {
         coords = pow2(coords);
         if (coords.x > treashold || coords.y > treashold) {
-            color = vec4(1);
+            color = pallete(i);
             return;
         }
     }
