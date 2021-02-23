@@ -20,9 +20,13 @@ unsigned int program;
 
 /* The center of the fractal. x, y, ca, cb */
 float position[4] = { 0.0f, 0.0f, 0.5f, 0.0f };
-float positionSpeed[4] = { 0.0f, 0.0f , 0.0f, 0.0f };
+float speed[4] = { 0.0f, 0.0f , 0.0f, 0.0f };
 
-const float movementSpeed = 0.1f;
+float zoom = 1.0f;
+float zoomSpeed = 0.0f;
+
+const float MOVEMENT_SPEED[4] = { 0.5f, 0.5f, 0.1f, 0.1f };
+const float ZOOM_SPEED = 1.5F;
 
 double lastTime;
 
@@ -32,6 +36,10 @@ void UpdateUniformArguments() {
     location = glGetUniformLocation(program, "position");
     assert(location != -1);
     glUniform4f(location, position[0], position[1], position[2], position[3]);
+
+    location = glGetUniformLocation(program, "zoom");
+    assert(location != -1);
+    glUniform1f(location, zoom);
 }
 
 void SetupUniformArguments() {
@@ -46,15 +54,19 @@ static void ErrorCallback(int error, const char* description) {
     fprintf(stderr, "Error: %s\n", description);
 }
 
-static void UpdateSpeed(int index, int action, bool positiveDir) {
+static float getDir(int action, bool positiveDir) {
     float dir = 1.0f;
     if (!positiveDir)
         dir *= -1.0f;
     if (action == GLFW_RELEASE)
         dir *= -1.0f;
-    positionSpeed[index] += dir * movementSpeed;
+    return dir;
+}
 
-    printf("Speed updated: %.1f\t%.1f\t%.1f\t%.1f\n", positionSpeed[0], positionSpeed[1], positionSpeed[2], positionSpeed[3]);
+static void UpdateMovementSpeed(int index, int action, bool positiveDir) {
+    speed[index] += getDir(action, positiveDir) * MOVEMENT_SPEED[index];
+
+    printf("Speed updated: %.1f\t%.1f\t%.1f\t%.1f\n", speed[0], speed[1], speed[2], speed[3]);
 }
 
 static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -62,31 +74,38 @@ static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, i
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     if (action == GLFW_PRESS || action == GLFW_RELEASE) {
         switch (key) {
-        case GLFW_KEY_Q:
-            UpdateSpeed(0, action, true);
-            break;
         case GLFW_KEY_A:
-            UpdateSpeed(0, action, false);
-            break;
-        case GLFW_KEY_W:
-            UpdateSpeed(1, action, true);
-            break;
-        case GLFW_KEY_S:
-            UpdateSpeed(1, action, false);
-            break;
-        case GLFW_KEY_E:
-            UpdateSpeed(2, action, true);
+            UpdateMovementSpeed(0, action, true);
             break;
         case GLFW_KEY_D:
-            UpdateSpeed(2, action, false);
+            UpdateMovementSpeed(0, action, false);
+            break;
+        case GLFW_KEY_S:
+            UpdateMovementSpeed(1, action, true);
+            break;
+        case GLFW_KEY_W:
+            UpdateMovementSpeed(1, action, false);
             break;
         case GLFW_KEY_R:
-            UpdateSpeed(3, action, true);
+            UpdateMovementSpeed(2, action, true);
             break;
         case GLFW_KEY_F:
-            UpdateSpeed(3, action, false);
+            UpdateMovementSpeed(2, action, false);
+            break;
+        case GLFW_KEY_T:
+            UpdateMovementSpeed(3, action, true);
+            break;
+        case GLFW_KEY_G:
+            UpdateMovementSpeed(3, action, false);
+            break;
+        case GLFW_KEY_LEFT_SHIFT:
+            zoomSpeed += ZOOM_SPEED * getDir(action, true);
+            break;
+        case GLFW_KEY_LEFT_CONTROL:
+            zoomSpeed += ZOOM_SPEED * getDir(action, false);
             break;
         }
+       
         printf("Key pressed: %d\n", key);
     }
 }
@@ -98,8 +117,10 @@ static void Update() {
     lastTime = glfwGetTime();
 
     for (int i = 0; i < 4; i++) {
-        position[i] += positionSpeed[i] * deltaT;
+        position[i] += deltaT * speed[i] / zoom;
     }
+
+    zoom *= pow(2, deltaT * zoomSpeed);
 
     UpdateUniformArguments();
 }

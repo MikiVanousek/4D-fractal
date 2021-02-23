@@ -5,6 +5,7 @@ in vec4 gl_FragCoord;
 
 uniform vec2 screenResolution;
 uniform float zoom;
+float zoomAdjust = 1 / zoom;
 /* The center of the fractal. x, y, ca, cb */
 uniform vec4 position; 
 
@@ -16,7 +17,7 @@ vec2 adjust = 2.0f * vec2(1.0f) / screenResolution;
 
 
 vec2 adjustCoords() {
-    return gl_FragCoord.xy * adjust - 1 - position.xy;
+    return  zoomAdjust * (gl_FragCoord.xy * adjust - 1) - position.xy;
 }
 
 vec4 pallete(int iter) {
