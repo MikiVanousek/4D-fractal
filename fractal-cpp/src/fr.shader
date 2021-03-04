@@ -5,9 +5,9 @@ in vec4 gl_FragCoord;
 /* Outputs color... */
 out vec4 color;
 
-const double treashold = 100000000000000000.0;
+const double treashold = 1000.0 * 1000.0 * 1000.0 ;
 /* The number of iterations performed for each pixel, before considering it bounded. */
-const int maxIter = 100;
+const int maxIter = 64;
 const vec4 notEscapedColor = vec4(0.0, 0.0, 0.0, 1.0);
 
 /* Width and height of the window in pixels. */
@@ -19,6 +19,12 @@ uniform double zoom;
 uniform dvec4 center; 
 uniform vec2 rotation;
 
+/* Optimization: variables are calcualted just once, not for every pixel */
+const float maxIterInverse = 1.0f / maxIter;
+double zoomAdjust = 1.0 / zoom;
+dvec2 adjust = 2.0 * dvec2(1.0) / screenResolution;
+float log2 = log(2.0);
+
 float rotationSin[2] = { sin(rotation[0]), sin(rotation[1]) };
 float rotationCos[2] = { cos(rotation[0]), cos(rotation[1]) };
 
@@ -29,10 +35,7 @@ int i;
 double ra, rb, rc, rd;
 float scale;
 
-/* Optimization: variables are calcualted just once, not for every pixel */
-const float maxIterInverse = 1.0f / maxIter;
-double zoomAdjust = 1.0 / zoom;
-dvec2 adjust = 2.0 * dvec2(1.0) / screenResolution;
+
 /* Converts the from screen-oriented coordinates to absolute coordinates */
 dvec4 rotateCenter() {
     ra = rotationCos[0] * center[0] + rotationSin[0] * center[2];
@@ -57,13 +60,20 @@ dvec4 rotatedPosition(dvec2 coords) {
     return rotatedCenter + dvec4(ra, rb, rc, rd);
 }
 
-vec4 pallete(int iter) {
-    scale = iter * maxIterInverse;
-    return vec4(vec3(1.0) * tanh(scale), 1.0);
+vec4 pallete(int iter, double distanceSQ) {
+    float log_zn = log(float(distanceSQ)) / 2.0;
+    float nu = log(log_zn / log2) / log2;
+    float iterAdj = iter + 1.0 - nu;
+    scale = iterAdj * maxIterInverse;
+    return vec4(vec3(1.0) * scale, 1.0);
 }
 
 dvec4 pow2(dvec4 a ) {
     return dvec4((a[0] * a[0] - a[1] * a[1] + a[2]), 2.0 * a[0] * a[1]+ a[3], a[2], a[3]);
+}
+
+double lengthSQ(dvec4 pos) {
+    return pos.x * pos.x + pos.y + pos.y;
 }
 
 void main(){
@@ -71,12 +81,14 @@ void main(){
     
     position = rotatedPosition(coords);
   
-    for (i; i < maxIter; i++) {
+    for (i = 0; i < maxIter; i++) {
         position = pow2(position);
-        if (position.x > treashold || position.y > treashold) {
-            color = pallete(i);
+
+        double length = lengthSQ(position);
+        if (length > treashold) {
+            color = pallete(i, lengthSQ(position));
             return;
         }
     }
-    color = notEscapedColor;
+    color = vec4(1.0, 0.0, 0.0, 0.0);
 };

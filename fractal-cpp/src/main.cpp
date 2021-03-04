@@ -236,6 +236,12 @@ static void AttachShaders() {
     glUseProgram(program);
 }
 
+struct shader_data_t
+{
+    int min;
+    int max;
+} shader_data;
+
 int main(void)
 {
     GLFWwindow* window;
@@ -283,6 +289,17 @@ int main(void)
 
     AttachShaders();
     SetupUniformArguments();
+
+    GLuint ssbo = 0;
+    glGenBuffers(1, &ssbo);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(shader_data), &shader_data, GL_DYNAMIC_COPY);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+    GLvoid* p = glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY);
+    memcpy(p, &shader_data, sizeof(shader_data));
+    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
