@@ -8,7 +8,7 @@ out vec4 color;
 const double treashold = 1000.0 * 1000.0 * 1000.0 ;
 /* The number of iterations performed for each pixel, before considering it bounded. */
 const int maxIter = 64;
-const vec4 notEscapedColor = vec4(0.0, 0.0, 0.0, 1.0);
+const vec4 notEscapedColor = vec4(1.0, 0.0, 0.0, 0.0);
 
 /* Width and height of the window in pixels. */
 uniform vec2 screenResolution;
@@ -62,9 +62,9 @@ dvec4 rotatedPosition(dvec2 coords) {
 
 vec4 pallete(int iter, double distanceSQ) {
     float log_zn = log(float(distanceSQ)) / 2.0;
-    float nu = log(log_zn / log2) / log2;
-    float iterAdj = iter + 1.0 - nu;
-    scale = iterAdj * maxIterInverse;
+    float nu = log(log_zn / log(2.0)) / log2; 
+    float iterAdj = 1.0 - nu + float(iter);
+    float scale = iterAdj / (maxIter);
     return vec4(vec3(1.0) * scale, 1.0);
 }
 
@@ -73,22 +73,21 @@ dvec4 pow2(dvec4 a ) {
 }
 
 double lengthSQ(dvec4 pos) {
-    return pos.x * pos.x + pos.y + pos.y;
+    return pos.x * pos.x + pos.y * pos.y;
 }
 
 void main(){
-    coords = adjustCoords();
+    dvec2 coords = adjustCoords();
     
-    position = rotatedPosition(coords);
+    dvec4 position = rotatedPosition(coords);
   
     for (i = 0; i < maxIter; i++) {
         position = pow2(position);
-
         double length = lengthSQ(position);
         if (length > treashold) {
             color = pallete(i, lengthSQ(position));
             return;
         }
     }
-    color = vec4(1.0, 0.0, 0.0, 0.0);
+    color = notEscapedColor;
 };
