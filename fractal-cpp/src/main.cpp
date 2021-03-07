@@ -1,4 +1,4 @@
-#include <stdlib.h>
+﻿#include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 
@@ -19,6 +19,13 @@ int resolutionX = 1000;
 int resolutionY = 500;
 
 unsigned int program;
+GLuint ssbo;
+struct shader_data {
+    float lastMin;
+    float lastMax;
+    float min;
+    float max;
+} data;
 
 /* The center of the fractal. x, y, ca, cb */
 double center[4] = { 0.0, 0.0, 0.0, 0.0 };
@@ -141,26 +148,6 @@ static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, i
     }
 }
 
-static void Update() {
-    if (lastTime == NULL)
-        lastTime = glfwGetTime();
-    double deltaT = glfwGetTime() - lastTime;
-    lastTime = glfwGetTime();
-
-    for (int i = 0; i < 4; i++) {
-        center[i] += deltaT * currentMovementSpeed[i] / zoom;
-    }
-
-    for (int i = 0; i < 2; i++) {
-        rotation[i] += deltaT * currentRotationSpeed[i] / zoom;
-    }
-
-    zoom *= pow(2, deltaT * currentZoomSpeed);
-    printf("Zoom: %d\n", zoom);
-
-    UpdateUniformArguments();
-}
-
 std::string ReadFile(const char* filePath) {
     std::string content;
     std::ifstream fileStream(filePath, std::ios::in);
@@ -236,11 +223,57 @@ static void AttachShaders() {
     glUseProgram(program);
 }
 
-struct shader_data_t
-{
-    int min;
-    int max;
-} shader_data;
+void printInfo() {
+    /* Getting version info */
+    const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
+    const GLubyte* version = glGetString(GL_VERSION); // version as a string
+    printf("Renderer: %s\n", renderer);
+    printf("OpenGL version supported %s\n", version);
+}
+
+void setupBuffer() {
+    data.min = 1.0;
+    data.max = 0.0;
+
+    glGenBuffers(1, &ssbo);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), &data, GL_DYNAMIC_DRAW); //sizeof(data) only works for statically sized C/C++ arrays.
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
+
+void updateBuffer() {
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 3);
+    glGetBufferSubData(ssbo, 0, sizeof(data), &data);
+    printf("Last min: %.5\nf", data.min);
+    data.lastMax = data.min;
+    data.lastMax = data.max;
+    data.min = 1.0;
+    data.max = 0.0;
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), &data, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+}
+
+static void Update() {
+    if (lastTime == NULL)
+        lastTime = glfwGetTime();
+    double deltaT = glfwGetTime() - lastTime;
+    lastTime = glfwGetTime();
+
+    for (int i = 0; i < 4; i++) {
+        center[i] += deltaT * currentMovementSpeed[i] / zoom;
+    }
+
+    for (int i = 0; i < 2; i++) {
+        rotation[i] += deltaT * currentRotationSpeed[i] / zoom;
+    }
+
+    zoom *= pow(2, deltaT * currentZoomSpeed);
+    printf("Zoom: %d\n", zoom);
+
+    UpdateUniformArguments();
+    updateBuffer();
+}
 
 int main(void)
 {
@@ -278,28 +311,14 @@ int main(void)
         return -1;
     }
 
-    /* Getting version info */
-    const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
-    const GLubyte* version = glGetString(GL_VERSION); // version as a string
-    printf("Renderer: %s\n", renderer);
-    printf("OpenGL version supported %s\n", version);
-
+    printInfo();
 
     glfwSwapInterval(1);
 
     AttachShaders();
+    setupBuffer();
+    
     SetupUniformArguments();
-
-    GLuint ssbo = 0;
-    glGenBuffers(1, &ssbo);
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(shader_data), &shader_data, GL_DYNAMIC_COPY);
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-    GLvoid* p = glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_WRITE_ONLY);
-    memcpy(p, &shader_data, sizeof(shader_data));
-    glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
