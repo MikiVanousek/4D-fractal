@@ -18,13 +18,12 @@
 int resolutionX = 1000;
 int resolutionY = 500;
 
-unsigned int program;
+unsigned int mainProgram;
+unsigned int computeProgram;
+
 GLuint ssbo;
 struct shader_data {
-    float lastMin;
-    float lastMax;
-    float min;
-    float max;
+    float data[1920];
 } data;
 
 /* The center of the fractal. x, y, ca, cb */
@@ -47,21 +46,21 @@ double lastTime;
 void UpdateUniformArguments() {
     int location;
 
-    location = glGetUniformLocation(program, "center");
+    location = glGetUniformLocation(mainProgram, "center");
     assert(location != -1);
     glUniform4d(location, center[0], center[1], center[2], center[3]);
 
-    location = glGetUniformLocation(program, "zoom");
+    location = glGetUniformLocation(mainProgram, "zoom");
     assert(location != -1);
     glUniform1d(location, zoom);
 
-    location = glGetUniformLocation(program, "rotation");
+    location = glGetUniformLocation(mainProgram, "rotation");
     assert(location != -1);
     glUniform2f(location, rotation[0], rotation[1]);
 }
 
 void SetupUniformArguments() {
-    int location = glGetUniformLocation(program, "screenResolution");
+    int location = glGetUniformLocation(mainProgram, "screenResolution");
     assert(location != -1);
     glUniform2f(location, (float)resolutionX, (float)resolutionY);
 
@@ -171,8 +170,10 @@ static unsigned int CompileShader(const std::string& source, unsigned int type) 
     char* shaderTypeName;
     if (type == GL_VERTEX_SHADER)
         shaderTypeName = (char*)"Vertex Shader";
-    else
+    else if(type == GL_FRAGMENT_SHADER)
         shaderTypeName = (char*)"Fragment Shader";
+    else
+        shaderTypeName = (char*)"Other Shader";
     
 
     unsigned int id = glCreateShader(type);
@@ -185,7 +186,7 @@ static unsigned int CompileShader(const std::string& source, unsigned int type) 
     if (result == GL_FALSE) {
         int length;
         glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
-        char* message = (char*)alloca(length * sizeof(char));
+        char* message = (char*)_malloca(length * sizeof(char));
         glGetShaderInfoLog(id, length, &length, message);
 
         printf("%s attachment failed!\n", shaderTypeName);
@@ -201,26 +202,35 @@ static unsigned int CompileShader(const std::string& source, unsigned int type) 
 }
 
 static void AttachShaders() {
-    program = glCreateProgram();
+    mainProgram = glCreateProgram();
+    computeProgram = glCreateProgram();
 
     std::string vertShaderStr = ReadFile("src/vs.shader");
+    std::string compShaderStr = ReadFile("src/cs.shader");
     std::string fragShaderStr = ReadFile("src/fr.shader");
 
     
     unsigned int vs = CompileShader(vertShaderStr, GL_VERTEX_SHADER);
+    unsigned int cs = CompileShader(compShaderStr, GL_COMPUTE_SHADER);
     unsigned int fs = CompileShader(fragShaderStr, GL_FRAGMENT_SHADER);
  
-    glAttachShader(program, vs);
-    glAttachShader(program, fs);
+    glAttachShader(mainProgram, vs);
+    glAttachShader(mainProgram, fs);
+    glAttachShader(computeProgram, cs);
     
-    glLinkProgram(program);
-    glValidateProgram(program);
+    glLinkProgram(computeProgram);
+    glValidateProgram(computeProgram);
+
+    glLinkProgram(mainProgram);
+    glValidateProgram(mainProgram);
+
+    glUseProgram(mainProgram);
     
     /* Removes shaders from cash. */
     glDeleteShader(vs);
+    glDeleteShader(cs);
     glDeleteShader(fs);
 
-    glUseProgram(program);
 }
 
 void printInfo() {
@@ -229,28 +239,43 @@ void printInfo() {
     const GLubyte* version = glGetString(GL_VERSION); // version as a string
     printf("Renderer: %s\n", renderer);
     printf("OpenGL version supported %s\n", version);
+    int work_grp_cnt[3];
+
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &work_grp_cnt[0]);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &work_grp_cnt[1]);
+    glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &work_grp_cnt[2]);
+
+    printf("max global (total) work group counts x:%i y:%i z:%i\n",
+        work_grp_cnt[0], work_grp_cnt[1], work_grp_cnt[2]);
 }
 
 void setupBuffer() {
-    data.min = 1.0;
-    data.max = 0.0;
-
     glGenBuffers(1, &ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), &data, GL_DYNAMIC_DRAW); //sizeof(data) only works for statically sized C/C++ arrays.
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
+    glNamedBufferStorage(ssbo, sizeof(float) * 1920, &data, GL_MAP_WRITE_BIT | GL_MAP_READ_BIT); //sizeof(data) only works for statically sized C/C++ arrays.
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
+void readBuffer() {
+    float* ptr = (float*)glMapNamedBufferRange(ssbo, 0, sizeof(float)*1920, GL_MAP_READ_BIT);
+
+    if (ptr == nullptr)
+        std::cout << "Map failed\n";
+    else // Read buffer
+        for (size_t i = 0; i < 1920; ++i)
+            std::cout << ptr[i] << " ";
+
+    // Unmap buffer
+    bool result = glUnmapNamedBuffer(ssbo);
+    if (!result)
+        std::cout << "Buffer corrupt\n";
+}
 void updateBuffer() {
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 3);
     glGetBufferSubData(ssbo, 0, sizeof(data), &data);
-    printf("Last min: %.5\nf", data.min);
-    data.lastMax = data.min;
-    data.lastMax = data.max;
-    data.min = 1.0;
-    data.max = 0.0;
-    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), &data, GL_DYNAMIC_DRAW);
+    //printf("Last min: %.5f\n", data.min);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), &data, GL_STREAM_DRAW);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
@@ -269,7 +294,7 @@ static void Update() {
     }
 
     zoom *= pow(2, deltaT * currentZoomSpeed);
-    printf("Zoom: %d\n", zoom);
+    //printf("Zoom: %d\n", zoom);
 
     UpdateUniformArguments();
     updateBuffer();
@@ -315,29 +340,35 @@ int main(void)
 
     glfwSwapInterval(1);
 
-    AttachShaders();
     setupBuffer();
-    
+
+    AttachShaders();
+ 
     SetupUniformArguments();
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
+        glUseProgram(computeProgram);
+        glDispatchCompute(resolutionX, resolutionY, 1);
+        readBuffer();
+        glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //glDrawArrays(GL_TRIANGLES, 0, 3);
+        glUseProgram(mainProgram);
 
         /* Drawing the whole screen using the shader */
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
 
         /* Poll for and process events */
         glfwPollEvents();
 
         Update();
+
+        /* Swap front and back buffers */
+        glfwSwapBuffers(window);
+
     }
 
     glfwTerminate();

@@ -1,11 +1,7 @@
 ﻿  main.cpp
 C:\Projects\fractal-cpp\fractal-cpp\dependencies\linmath\linmath.h(583,18): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 C:\Projects\fractal-cpp\fractal-cpp\dependencies\linmath\linmath.h(590,18): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(37,41): warning C4305: 'initializing': truncation from 'double' to 'float'
-C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(147,16): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'double'
-C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(248,12): warning C4476: 'printf' : unknown type field character '\n' in format specifier
-C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(248,36): warning C4474: 'printf' : too many arguments passed for format string
-C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(248,36): message : placeholders and their parameters expect 0 variadic arguments, but 1 were provided
-C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(268,63): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(272,12): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'double'
+C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(36,41): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(146,16): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'double'
+C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(293,63): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
   fractal-cpp.vcxproj -> C:\Projects\fractal-cpp\fractal-cpp\Debug\fractal-cpp.exe

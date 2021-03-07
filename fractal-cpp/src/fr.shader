@@ -2,13 +2,18 @@
 
 /* Takes in the position of the pixel as parametr. */
 in vec4 gl_FragCoord;
-in float randFloat[];
 /* Outputs color... */
 out vec4 color;
 
 const double treashold = 1000.0 * 1000.0 * 1000.0 ;
 /* The number of iterations performed for each pixel, before considering it bounded. */
 const int maxIter = 64;
+
+layout(std430, binding = 1) buffer bufferIn
+{
+    float data[];
+};
+
 const vec4 notEscapedColor = vec4(1.0, 0.0, 0.0, 0.0);
 
 /* Width and height of the window in pixels. */
@@ -36,13 +41,6 @@ int i;
 double ra, rb, rc, rd;
 float scale;
 
-layout(std430, binding = 3) buffer bufferData
-{
-    float lastMin;
-    float lastMax;
-    float min;
-    float max;
-};
 
 
 /* Converts the from screen-oriented coordinates to absolute coordinates */
@@ -74,10 +72,6 @@ vec4 pallete(int iter, double distanceSQ) {
     float nu = log(log_zn / log(2.0)) / log2; 
     float iterAdj = 1.0 - nu + float(iter);
     float scale = iterAdj / (maxIter);
-    if (scale > max)
-        max = scale;
-    if (scale < min)
-        min = scale;
     return vec4(vec3(1.0) * scale, 1.0);
 }
 
@@ -90,8 +84,10 @@ double lengthSQ(dvec4 pos) {
 }
 
 void main(){
+    color = vec4(0.0, data[int(gl_FragCoord.x)], 0.0, 1.0);
+    return;
     dvec2 coords = adjustCoords();
-    
+
     dvec4 position = rotatedPosition(coords);
   
     for (i = 0; i < maxIter; i++) {
@@ -102,5 +98,5 @@ void main(){
             return;
         }
     }
-    color = vec4(randFloat[0], randFloat[1], 0, 1);
+    color = notEscapedColor;
 };
