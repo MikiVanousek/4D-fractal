@@ -15,6 +15,8 @@
 #include <linmath.h>
 #include <math.h>
 
+#include <cmath>
+
 int resolutionX = 1000;
 int resolutionY = 500;
 
@@ -23,8 +25,12 @@ unsigned int computeProgram;
 
 GLuint ssbo;
 struct shader_data {
-    float data[1920];
+    float min = 1.0;
+    float max = 0.0;
+    float* data[1080*1920]; //biggest supported resolution
 } data;
+
+const int SH_EXTRA_FLOATS = 2;
 
 /* The center of the fractal. x, y, ca, cb */
 double center[4] = { 0.0, 0.0, 0.0, 0.0 };
@@ -37,6 +43,8 @@ float rotation[2] = { 3.14 /2, 3.14 / 2 } ;
 //float rotation[2] = { 0.0, 0.0};
 float currentRotationSpeed[2] = { 0.0f, 0.0f };
 
+float minMax[2];
+
 const float MOVEMENT_SPEED[4] = { 0.5f, 0.5f, 0.1f, 0.1f };
 const float ZOOM_SPEED = 1.5f;
 const float ROTATION_SPEED = 0.5f;
@@ -45,22 +53,24 @@ double lastTime;
 
 void UpdateUniformArguments() {
     int location;
-
-    location = glGetUniformLocation(mainProgram, "center");
+    glUseProgram(computeProgram);
+    location = glGetUniformLocation(computeProgram, "center");
     assert(location != -1);
     glUniform4d(location, center[0], center[1], center[2], center[3]);
 
-    location = glGetUniformLocation(mainProgram, "zoom");
+    location = glGetUniformLocation(computeProgram, "zoom");
     assert(location != -1);
     glUniform1d(location, zoom);
 
-    location = glGetUniformLocation(mainProgram, "rotation");
+    location = glGetUniformLocation(computeProgram, "rotation");
     assert(location != -1);
     glUniform2f(location, rotation[0], rotation[1]);
+    glUseProgram(mainProgram);
 }
 
 void SetupUniformArguments() {
-    int location = glGetUniformLocation(mainProgram, "screenResolution");
+    glUseProgram(computeProgram);
+    int location = glGetUniformLocation(computeProgram, "screenResolution");
     assert(location != -1);
     glUniform2f(location, (float)resolutionX, (float)resolutionY);
 
@@ -173,7 +183,7 @@ static unsigned int CompileShader(const std::string& source, unsigned int type) 
     else if(type == GL_FRAGMENT_SHADER)
         shaderTypeName = (char*)"Fragment Shader";
     else
-        shaderTypeName = (char*)"Other Shader";
+        shaderTypeName = (char*)"Compute Shader";
     
 
     unsigned int id = glCreateShader(type);
@@ -206,13 +216,13 @@ static void AttachShaders() {
     computeProgram = glCreateProgram();
 
     std::string vertShaderStr = ReadFile("src/vs.shader");
-    std::string compShaderStr = ReadFile("src/cs.shader");
     std::string fragShaderStr = ReadFile("src/fr.shader");
+    std::string compShaderStr = ReadFile("src/cs.shader");
 
     
     unsigned int vs = CompileShader(vertShaderStr, GL_VERTEX_SHADER);
-    unsigned int cs = CompileShader(compShaderStr, GL_COMPUTE_SHADER);
     unsigned int fs = CompileShader(fragShaderStr, GL_FRAGMENT_SHADER);
+    unsigned int cs = CompileShader(compShaderStr, GL_COMPUTE_SHADER);
  
     glAttachShader(mainProgram, vs);
     glAttachShader(mainProgram, fs);
@@ -224,7 +234,7 @@ static void AttachShaders() {
     glLinkProgram(mainProgram);
     glValidateProgram(mainProgram);
 
-    glUseProgram(mainProgram);
+    glUseProgram(computeProgram);
     
     /* Removes shaders from cash. */
     glDeleteShader(vs);
@@ -252,19 +262,37 @@ void printInfo() {
 void setupBuffer() {
     glGenBuffers(1, &ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-    glNamedBufferStorage(ssbo, sizeof(float) * 1920, &data, GL_MAP_WRITE_BIT | GL_MAP_READ_BIT); //sizeof(data) only works for statically sized C/C++ arrays.
+    glNamedBufferStorage(ssbo, sizeof(float) * (resolutionX * resolutionY + SH_EXTRA_FLOATS), &data, GL_MAP_WRITE_BIT | GL_MAP_READ_BIT); //sizeof(data) only works for statically sized C/C++ arrays.
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo);
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
-void readBuffer() {
-    float* ptr = (float*)glMapNamedBufferRange(ssbo, 0, sizeof(float)*1920, GL_MAP_READ_BIT);
+void updateMinMax() {
+    minMax[0] = 1.0;
+    minMax[1] = 0.0;
+    float* ptr = (float*)glMapNamedBufferRange(ssbo, 0, sizeof(float) * (resolutionX * resolutionY + SH_EXTRA_FLOATS), GL_MAP_READ_BIT);
+    
+    int a = 0;
 
     if (ptr == nullptr)
         std::cout << "Map failed\n";
-    else // Read buffer
-        for (size_t i = 0; i < 1920; ++i)
-            std::cout << ptr[i] << " ";
+    else { // Read buffer
+        
+        for (size_t i = 2; i < resolutionX * resolutionY + SH_EXTRA_FLOATS; ++i) {
+            if (ptr[i] != -1) {
+                if (ptr[i] < minMax[0]) {
+                    minMax[0] = ptr[i];
+                    //std::cout << "new Min:" << minMax[0] << "\n ";
+                }
+
+                if (ptr[i] > minMax[1])
+                    minMax[1] = ptr[i];
+            }
+            if (ptr[i] == - INFINITY) a++;
+        }
+        std::cout << "min:" << ptr[0] << "\n ";
+        std::cout << "max:" << ptr[1] << "\n ";
+        std::cout << "a:" << a << "\n ";
+    }
 
     // Unmap buffer
     bool result = glUnmapNamedBuffer(ssbo);
@@ -272,11 +300,11 @@ void readBuffer() {
         std::cout << "Buffer corrupt\n";
 }
 void updateBuffer() {
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 3);
-    glGetBufferSubData(ssbo, 0, sizeof(data), &data);
-    //printf("Last min: %.5f\n", data.min);
-    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), &data, GL_STREAM_DRAW);
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    const float d[2] = { -2.0, 5.0 };
+    //glGenBuffers(1, &ssbo);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+    glNamedBufferStorage(ssbo, sizeof(float) * (resolutionX * resolutionY + SH_EXTRA_FLOATS), &data, GL_MAP_WRITE_BIT | GL_MAP_READ_BIT); //sizeof(data) only works for statically sized C/C++ arrays.
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo);
 }
 
 static void Update() {
@@ -295,9 +323,9 @@ static void Update() {
 
     zoom *= pow(2, deltaT * currentZoomSpeed);
     //printf("Zoom: %d\n", zoom);
+    //updateMinMax();
 
     UpdateUniformArguments();
-    updateBuffer();
 }
 
 int main(void)
@@ -351,9 +379,10 @@ int main(void)
     {
         /* Render here */
         glUseProgram(computeProgram);
+        setupBuffer();
         glDispatchCompute(resolutionX, resolutionY, 1);
-        readBuffer();
         glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+
         glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(mainProgram);
