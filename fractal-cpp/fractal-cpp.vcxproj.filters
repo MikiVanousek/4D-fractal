@@ -21,7 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\vs.shader" />
-    <None Include="src\fr.shader" />
     <None Include="src\cs.shader" />
+    <None Include="src\fr.shader" />
   </ItemGroup>
 </Project>

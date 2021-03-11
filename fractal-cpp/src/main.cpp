@@ -43,8 +43,6 @@ float rotation[2] = { 3.14 /2, 3.14 / 2 } ;
 //float rotation[2] = { 0.0, 0.0};
 float currentRotationSpeed[2] = { 0.0f, 0.0f };
 
-float minMax[2];
-
 const float MOVEMENT_SPEED[4] = { 0.5f, 0.5f, 0.1f, 0.1f };
 const float ZOOM_SPEED = 1.5f;
 const float ROTATION_SPEED = 0.5f;
@@ -262,49 +260,13 @@ void printInfo() {
 void setupBuffer() {
     glGenBuffers(1, &ssbo);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-    glNamedBufferStorage(ssbo, sizeof(float) * (resolutionX * resolutionY + SH_EXTRA_FLOATS), &data, GL_MAP_WRITE_BIT | GL_MAP_READ_BIT); //sizeof(data) only works for statically sized C/C++ arrays.
+    glNamedBufferStorage(ssbo, sizeof(float) * (resolutionX * resolutionY + SH_EXTRA_FLOATS), &data, GL_MAP_WRITE_BIT | GL_MAP_READ_BIT | GL_DYNAMIC_STORAGE_BIT); //sizeof(data) only works for statically sized C/C++ arrays.
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo);
 }
 
-void updateMinMax() {
-    minMax[0] = 1.0;
-    minMax[1] = 0.0;
-    float* ptr = (float*)glMapNamedBufferRange(ssbo, 0, sizeof(float) * (resolutionX * resolutionY + SH_EXTRA_FLOATS), GL_MAP_READ_BIT);
-    
-    int a = 0;
-
-    if (ptr == nullptr)
-        std::cout << "Map failed\n";
-    else { // Read buffer
-        
-        for (size_t i = 2; i < resolutionX * resolutionY + SH_EXTRA_FLOATS; ++i) {
-            if (ptr[i] != -1) {
-                if (ptr[i] < minMax[0]) {
-                    minMax[0] = ptr[i];
-                    //std::cout << "new Min:" << minMax[0] << "\n ";
-                }
-
-                if (ptr[i] > minMax[1])
-                    minMax[1] = ptr[i];
-            }
-            if (ptr[i] == - INFINITY) a++;
-        }
-        std::cout << "min:" << ptr[0] << "\n ";
-        std::cout << "max:" << ptr[1] << "\n ";
-        std::cout << "a:" << a << "\n ";
-    }
-
-    // Unmap buffer
-    bool result = glUnmapNamedBuffer(ssbo);
-    if (!result)
-        std::cout << "Buffer corrupt\n";
-}
 void updateBuffer() {
-    const float d[2] = { -2.0, 5.0 };
-    //glGenBuffers(1, &ssbo);
-    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-    glNamedBufferStorage(ssbo, sizeof(float) * (resolutionX * resolutionY + SH_EXTRA_FLOATS), &data, GL_MAP_WRITE_BIT | GL_MAP_READ_BIT); //sizeof(data) only works for statically sized C/C++ arrays.
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo);
+    float d[] = { data.min, data.max };
+    glNamedBufferSubData(ssbo, 0, 2 * sizeof(float), &d);
 }
 
 static void Update() {
@@ -322,8 +284,6 @@ static void Update() {
     }
 
     zoom *= pow(2, deltaT * currentZoomSpeed);
-    //printf("Zoom: %d\n", zoom);
-    //updateMinMax();
 
     UpdateUniformArguments();
 }
@@ -379,7 +339,6 @@ int main(void)
     {
         /* Render here */
         glUseProgram(computeProgram);
-        setupBuffer();
         glDispatchCompute(resolutionX, resolutionY, 1);
         glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 
@@ -392,7 +351,8 @@ int main(void)
 
         /* Poll for and process events */
         glfwPollEvents();
-
+        
+        updateBuffer();
         Update();
 
         /* Swap front and back buffers */
