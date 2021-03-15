@@ -27,7 +27,7 @@ GLuint ssbo;
 struct shader_data {
     float min = 1.0;
     float max = 0.0;
-    float* data[1080*1920]; //biggest supported resolution
+    float* data[3840 * 2160]; //biggest supported resolution
 } data;
 
 const int SH_EXTRA_FLOATS = 2;
@@ -50,8 +50,9 @@ const float ROTATION_SPEED = 0.5f;
 double lastTime;
 
 void UpdateUniformArguments() {
-    int location;
     glUseProgram(computeProgram);
+    int location;
+    
     location = glGetUniformLocation(computeProgram, "center");
     assert(location != -1);
     glUniform4d(location, center[0], center[1], center[2], center[3]);
@@ -70,7 +71,12 @@ void SetupUniformArguments() {
     glUseProgram(computeProgram);
     int location = glGetUniformLocation(computeProgram, "screenResolution");
     assert(location != -1);
-    glUniform2f(location, (float)resolutionX, (float)resolutionY);
+    glUniform2i(location, resolutionX, resolutionY);
+
+    glUseProgram(mainProgram);
+    location = glGetUniformLocation(mainProgram, "screenResolution");
+    assert(location != -1);
+    glUniform2i(location, resolutionX, resolutionY);
 
     UpdateUniformArguments();
 }

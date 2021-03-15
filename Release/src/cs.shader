@@ -10,7 +10,7 @@ layout(std430, binding = 1) buffer destBuffer
 
 const double treashold = 1000.0 * 1000.0;
 /* The number of iterations performed for each pixel, before considering it bounded. */
-const int maxIter = 128;
+const int maxIter = 256;
 
 layout(std430, binding = 1) buffer bufferIn
 {
@@ -22,7 +22,7 @@ layout(std430, binding = 1) buffer bufferIn
 const vec4 notEscapedColor = vec4(1.0, 0.0, 0.0, 0.0);
 
 /* Width and height of the window in pixels. */
-uniform vec2 screenResolution;
+uniform ivec2 screenResolution;
 /* The zoom factor by which everything is scaled. */
 uniform double zoom;
 

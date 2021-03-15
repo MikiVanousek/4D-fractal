@@ -2,7 +2,7 @@
 
 in vec4 gl_FragCoord;
 out vec4 color;
-uniform vec2 minMax;
+uniform ivec2 screenResolution;
 
 layout(std430, binding = 1) buffer bufferIn
 {
@@ -32,7 +32,7 @@ vec4 lerp(vec3 c1, vec3 c2, float progress) {
 }
 
 void main(){
-    int index = int(gl_FragCoord.x) + 1920 * int(gl_FragCoord.y);
+    int index = int(gl_FragCoord.x) + screenResolution.x * int(gl_FragCoord.y);
    
     if (data[index] == -1) {
         color = notEscapedColor;
