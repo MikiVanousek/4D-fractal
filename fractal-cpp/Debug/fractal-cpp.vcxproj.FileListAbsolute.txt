@@ -1,0 +1,1 @@
+C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\Debug\fractal-cpp.vcxproj.CopyComplete

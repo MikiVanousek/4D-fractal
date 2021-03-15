@@ -15,15 +15,16 @@ float adjust = 1.0 / (max - min);
 
 const vec4 notEscapedColor = vec4(0.0);
 
-const int NUMBER_OF_COLORS = 5;
+const int NUMBER_OF_COLORS = 4;
 const float PART = 1.0 / (NUMBER_OF_COLORS - 1);
 const float CRI = 1 / 255.0;
 const vec3 COLORS[NUMBER_OF_COLORS] = {
-    vec3(0.0, 7.0 * CRI, 100.0 * CRI),
-    vec3(32.0 * CRI, 107.0 * CRI, 203 * CRI),
-    vec3(237.0 * CRI, 1.0, 1.0),
-    vec3(1.0, 170 * CRI, 0.0),
-    vec3(0.0, 2.0 * CRI, 0.0)
+    //vec3(1.0, 1.0, 1.0),
+    vec3(1.0, 1.0, 0.0),
+    vec3(1.0, 0.0, 0.0),
+    vec3(0.0, 0.0, 1.0),
+    vec3(0.0, 1.0, 0.0),
+    
 };
 
 vec4 lerp(vec3 c1, vec3 c2, float progress) {
