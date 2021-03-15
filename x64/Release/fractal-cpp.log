@@ -1,0 +1,45 @@
+﻿  main.cpp
+C:\Projects\fractal-cpp\fractal-cpp\dependencies\linmath\linmath.h(583,18): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Projects\fractal-cpp\fractal-cpp\dependencies\linmath\linmath.h(590,18): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(42,41): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(154,16): warning C4477: 'printf' : format string '%d' requires an argument of type 'int', but variadic argument 1 has type 'double'
+C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\main.cpp(283,63): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+main.obj : error LNK2001: unresolved external symbol glfwSwapBuffers
+main.obj : error LNK2001: unresolved external symbol __glewUseProgram
+main.obj : error LNK2001: unresolved external symbol glfwSwapInterval
+main.obj : error LNK2001: unresolved external symbol __glewGetShaderiv
+main.obj : error LNK2001: unresolved external symbol __glewCompileShader
+main.obj : error LNK2001: unresolved external symbol __glewCreateShader
+main.obj : error LNK2001: unresolved external symbol __glewBindBuffer
+main.obj : error LNK2001: unresolved external symbol glfwGetTime
+main.obj : error LNK2001: unresolved external symbol __glewCreateProgram
+main.obj : error LNK2001: unresolved external symbol glfwGetVideoMode
+main.obj : error LNK2001: unresolved external symbol __glewGetShaderInfoLog
+main.obj : error LNK2001: unresolved external symbol __glewValidateProgram
+main.obj : error LNK2001: unresolved external symbol __glewUniform2f
+main.obj : error LNK2001: unresolved external symbol glfwTerminate
+main.obj : error LNK2001: unresolved external symbol glfwPollEvents
+main.obj : error LNK2001: unresolved external symbol glfwInit
+main.obj : error LNK2001: unresolved external symbol __glewDispatchCompute
+main.obj : error LNK2001: unresolved external symbol glfwSetKeyCallback
+main.obj : error LNK2001: unresolved external symbol glfwSetWindowShouldClose
+main.obj : error LNK2001: unresolved external symbol glfwCreateWindow
+main.obj : error LNK2001: unresolved external symbol __glewGetUniformLocation
+main.obj : error LNK2001: unresolved external symbol __glewGetIntegeri_v
+main.obj : error LNK2001: unresolved external symbol glfwMakeContextCurrent
+main.obj : error LNK2001: unresolved external symbol __glewAttachShader
+main.obj : error LNK2001: unresolved external symbol __glewNamedBufferStorage
+main.obj : error LNK2001: unresolved external symbol __glewShaderSource
+main.obj : error LNK2001: unresolved external symbol __glewBindBufferBase
+main.obj : error LNK2001: unresolved external symbol glfwGetPrimaryMonitor
+main.obj : error LNK2001: unresolved external symbol __glewUniform4d
+main.obj : error LNK2001: unresolved external symbol __glewGenBuffers
+main.obj : error LNK2001: unresolved external symbol __glewNamedBufferSubData
+main.obj : error LNK2001: unresolved external symbol __glewDeleteShader
+main.obj : error LNK2001: unresolved external symbol __glewLinkProgram
+main.obj : error LNK2001: unresolved external symbol glfwSetErrorCallback
+main.obj : error LNK2001: unresolved external symbol glfwWindowShouldClose
+main.obj : error LNK2001: unresolved external symbol glewInit
+main.obj : error LNK2001: unresolved external symbol __glewMemoryBarrier
+main.obj : error LNK2001: unresolved external symbol __glewUniform1d
+C:\Projects\fractal-cpp\fractal-cpp\x64\Release\fractal-cpp.exe : fatal error LNK1120: 38 unresolved externals
