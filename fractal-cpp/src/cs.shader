@@ -1,4 +1,6 @@
 #version 450
+#define PI 3.1415926538
+
 layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 layout(std430, binding = 1) buffer destBuffer
 {
@@ -36,8 +38,8 @@ double zoomAdjust = 1.0 / zoom;
 dvec2 adjust = 2.0 * dvec2(1.0) / screenResolution;
 float log2 = log(2.0);
 
-float rotationSin[2] = { sin(rotation[0]), sin(rotation[1]) };
-float rotationCos[2] = { cos(rotation[0]), cos(rotation[1]) };
+float rotationSin[2] = { sin(rotation[0] * PI), sin(rotation[1] * PI) };
+float rotationCos[2] = { cos(rotation[0] * PI), cos(rotation[1] * PI) };
 
 /* Optimization: variables are allocated just once, not for every pixel */
 dvec2 coords;
