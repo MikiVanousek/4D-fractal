@@ -24,4 +24,12 @@
     <None Include="src\cs.shader" />
     <None Include="src\fr.shader" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\controller.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shader_util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>

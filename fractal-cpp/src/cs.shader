@@ -6,11 +6,8 @@ layout(std430, binding = 1) buffer destBuffer
 	float max;
 	float data[];
 } outBuffer;
-/* Outputs color... */
 
 const double treashold = 1000.0 * 1000.0;
-/* The number of iterations performed for each pixel, before considering it bounded. */
-const int maxIter = 256;
 
 layout(std430, binding = 1) buffer bufferIn
 {
@@ -25,6 +22,9 @@ const vec4 notEscapedColor = vec4(1.0, 0.0, 0.0, 0.0);
 uniform ivec2 screenResolution;
 /* The zoom factor by which everything is scaled. */
 uniform double zoom;
+
+/* The number of iterations performed for each pixel, before considering it bounded. */
+uniform int maxIter;
 
 /* The center of the fractal. two visible dimensions - x, y; Two hidden - d, e */
 uniform dvec4 center;
