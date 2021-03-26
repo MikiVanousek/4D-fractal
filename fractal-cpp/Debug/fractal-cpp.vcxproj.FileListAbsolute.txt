@@ -1,1 +1,5 @@
 C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\Debug\fractal-cpp.vcxproj.CopyComplete
+C:\Projects\fractal-cpp\Debug\src\cs.shader
+C:\Projects\fractal-cpp\Debug\src\vs.shader
+C:\Projects\fractal-cpp\Debug\src\fr.shader
+C:\Projects\fractal-cpp\fractal-cpp\Debug\fractal-cpp.vcxproj.CopyComplete

@@ -2,10 +2,20 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Projects\fractal-cpp\fractal-cpp\Debug\fractal-cpp.exe</FullPath>
+      <FullPath>C:\Projects\fractal-cpp\Debug\fractal-cpp.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
-  <ContentFiles />
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\Projects\fractal-cpp\fractal-cpp\src\cs.shader</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Projects\fractal-cpp\fractal-cpp\src\fr.shader</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Projects\fractal-cpp\fractal-cpp\src\vs.shader</FullPath>
+    </ContentFile>
+  </ContentFiles>
   <SatelliteDlls />
   <NonRecipeFileRefs />
 </Project>

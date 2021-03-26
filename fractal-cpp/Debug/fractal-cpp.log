@@ -1,9 +1,1 @@
-﻿  main.cpp
-C:\Projects\fractal-cpp\fractal-cpp\src\controller.h(39,1): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\Projects\fractal-cpp\fractal-cpp\src\controller.h(51,32): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
-main.obj : error LNK2019: unresolved external symbol __imp___invalid_parameter referenced in function "void * __cdecl std::_Allocate_manually_vector_aligned<struct std::_Default_allocate_traits>(unsigned int)" (??$_Allocate_manually_vector_aligned@U_Default_allocate_traits@std@@@std@@YAPAXI@Z)
-main.obj : error LNK2019: unresolved external symbol __imp___CrtDbgReport referenced in function "void * __cdecl std::_Allocate_manually_vector_aligned<struct std::_Default_allocate_traits>(unsigned int)" (??$_Allocate_manually_vector_aligned@U_Default_allocate_traits@std@@@std@@YAPAXI@Z)
-msvcprtd.lib(locale0_implib.obj) : error LNK2019: unresolved external symbol __imp___free_dbg referenced in function "public: static void __cdecl std::_Fac_node::operator delete(void *)" (??3_Fac_node@std@@SAXPAX@Z)
-msvcprtd.lib(locale0_implib.obj) : error LNK2019: unresolved external symbol __imp___malloc_dbg referenced in function "public: static void * __cdecl std::_Fac_node::operator new(unsigned int)" (??2_Fac_node@std@@SAPAXI@Z)
-C:\Projects\fractal-cpp\Debug\fractal-cpp.exe : fatal error LNK1120: 4 unresolved externals
+﻿  fractal-cpp.vcxproj -> C:\Projects\fractal-cpp\Debug\fractal-cpp.exe

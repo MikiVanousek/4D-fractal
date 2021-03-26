@@ -1,0 +1,50 @@
+﻿  main.cpp
+C:\Projects\fractal-cpp\fractal-cpp\src\controller.h(38,1): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Projects\fractal-cpp\fractal-cpp\src\controller.h(50,38): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+main.obj : error LNK2019: unresolved external symbol __imp__invalid_parameter referenced in function "void * __cdecl std::_Allocate_manually_vector_aligned<struct std::_Default_allocate_traits>(unsigned __int64)" (??$_Allocate_manually_vector_aligned@U_Default_allocate_traits@std@@@std@@YAPEAX_K@Z)
+main.obj : error LNK2019: unresolved external symbol glewInit referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwInit referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwTerminate referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwSetErrorCallback referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwGetPrimaryMonitor referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwGetVideoMode referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwCreateWindow referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwWindowShouldClose referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwSetWindowShouldClose referenced in function "public: void __cdecl Controler::KeyCallback(struct GLFWwindow *,int,int,int,int)" (?KeyCallback@Controler@@QEAAXPEAUGLFWwindow@@HHHH@Z)
+main.obj : error LNK2019: unresolved external symbol glfwPollEvents referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwSetKeyCallback referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwGetTime referenced in function "void __cdecl Update(void)" (?Update@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol glfwMakeContextCurrent referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwSwapBuffers referenced in function main
+main.obj : error LNK2019: unresolved external symbol glfwSwapInterval referenced in function main
+main.obj : error LNK2019: unresolved external symbol __imp__CrtDbgReport referenced in function "void * __cdecl std::_Allocate_manually_vector_aligned<struct std::_Default_allocate_traits>(unsigned __int64)" (??$_Allocate_manually_vector_aligned@U_Default_allocate_traits@std@@@std@@YAPEAX_K@Z)
+main.obj : error LNK2001: unresolved external symbol __glewBindBuffer
+main.obj : error LNK2001: unresolved external symbol __glewGenBuffers
+main.obj : error LNK2001: unresolved external symbol __glewAttachShader
+main.obj : error LNK2001: unresolved external symbol __glewCompileShader
+main.obj : error LNK2001: unresolved external symbol __glewCreateProgram
+main.obj : error LNK2001: unresolved external symbol __glewCreateShader
+main.obj : error LNK2001: unresolved external symbol __glewDeleteShader
+main.obj : error LNK2001: unresolved external symbol __glewGetShaderInfoLog
+main.obj : error LNK2001: unresolved external symbol __glewGetShaderiv
+main.obj : error LNK2001: unresolved external symbol __glewGetUniformLocation
+main.obj : error LNK2001: unresolved external symbol __glewLinkProgram
+main.obj : error LNK2001: unresolved external symbol __glewShaderSource
+main.obj : error LNK2001: unresolved external symbol __glewUniform1i
+main.obj : error LNK2001: unresolved external symbol __glewUniform2f
+main.obj : error LNK2001: unresolved external symbol __glewUniform2i
+main.obj : error LNK2001: unresolved external symbol __glewUseProgram
+main.obj : error LNK2001: unresolved external symbol __glewValidateProgram
+main.obj : error LNK2001: unresolved external symbol __glewDispatchCompute
+main.obj : error LNK2001: unresolved external symbol __glewNamedBufferStorage
+main.obj : error LNK2001: unresolved external symbol __glewNamedBufferSubData
+main.obj : error LNK2001: unresolved external symbol __glewUniform1d
+main.obj : error LNK2001: unresolved external symbol __glewUniform4d
+main.obj : error LNK2001: unresolved external symbol __glewMemoryBarrier
+main.obj : error LNK2001: unresolved external symbol __glewBindBufferBase
+main.obj : error LNK2001: unresolved external symbol __glewGetIntegeri_v
+msvcprtd.lib(locale0_implib.obj) : error LNK2019: unresolved external symbol __imp__free_dbg referenced in function "public: static void __cdecl std::_Fac_node::operator delete(void *)" (??3_Fac_node@std@@SAXPEAX@Z)
+msvcprtd.lib(locale0_implib.obj) : error LNK2019: unresolved external symbol __imp__malloc_dbg referenced in function "public: static void * __cdecl std::_Fac_node::operator new(unsigned __int64)" (??2_Fac_node@std@@SAPEAX_K@Z)
+C:\Projects\fractal-cpp\dependencies\GLFW\lib-vc2019\glfw3.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Projects\fractal-cpp\dependencies\GLEW\lib\Release\Win32\glew32s.lib : warning LNK4272: library machine type 'x86' conflicts with target machine type 'x64'
+C:\Projects\fractal-cpp\x64\Debug\fractal-cpp.exe : fatal error LNK1120: 44 unresolved externals
