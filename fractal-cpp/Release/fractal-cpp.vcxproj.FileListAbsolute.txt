@@ -2,3 +2,6 @@ C:\Projects\fractal-cpp\Release\src\cs.shader
 C:\Projects\fractal-cpp\Release\src\fr.shader
 C:\Projects\fractal-cpp\Release\src\vs.shader
 C:\Projects\fractal-cpp\fractal-cpp\Release\fractal-cpp.vcxproj.CopyComplete
+C:\Projects\fractal-cpp\Windows\Release\src\cs.shader
+C:\Projects\fractal-cpp\Windows\Release\src\fr.shader
+C:\Projects\fractal-cpp\Windows\Release\src\vs.shader

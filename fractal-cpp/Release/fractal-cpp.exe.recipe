@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Projects\fractal-cpp\Release\fractal-cpp.exe</FullPath>
+      <FullPath>C:\Projects\fractal-cpp\Windows\Release\fractal-cpp.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>

@@ -1,1 +1,7 @@
-﻿  fractal-cpp.vcxproj -> C:\Projects\fractal-cpp\Release\fractal-cpp.exe
+﻿  Previous IPDB not found, fall back to full compilation.
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Generating code
+  All 202 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+glew32s.lib(glew.obj) : warning LNK4099: PDB '' was not found with 'glew32s.lib(glew.obj)' or at ''; linking object as if no debug info
+  fractal-cpp.vcxproj -> C:\Projects\fractal-cpp\Windows\Release\fractal-cpp.exe
