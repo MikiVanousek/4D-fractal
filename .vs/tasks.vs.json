@@ -5,6 +5,11 @@
       "taskLabel": "task-fractal-cpp",
       "appliesTo": "/",
       "type": "launch"
+    },
+    {
+      "taskLabel": "task-controller",
+      "appliesTo": "fractal-cpp/src/controller.h",
+      "type": "launch"
     }
   ]
 }

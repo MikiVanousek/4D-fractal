@@ -3,7 +3,10 @@
     "",
     "\\dependencies",
     "\\dependencies\\GLFW",
-    "\\dependencies\\GLFW\\include"
+    "\\dependencies\\GLFW\\include",
+    "\\fractal-cpp",
+    "\\fractal-cpp\\src"
   ],
+  "SelectedNode": "\\fractal-cpp\\src",
   "PreviewInSolutionExplorer": false
 }

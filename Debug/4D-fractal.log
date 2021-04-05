@@ -1,0 +1,4 @@
+﻿  main.cpp
+C:\Projects\4D-fractal\fractal-cpp\src\controller.h(38,1): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Projects\4D-fractal\fractal-cpp\src\controller.h(50,38): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  4D-fractal.vcxproj -> C:\Projects\4D-fractal\Debug\4D-fractal.exe

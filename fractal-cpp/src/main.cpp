@@ -79,9 +79,9 @@ static void AttachShaders() {
     mainProgram = glCreateProgram();
     computeProgram = glCreateProgram();
 
-    std::string vertShaderStr = ReadFile("src/vs.shader");
-    std::string fragShaderStr = ReadFile("src/fr.shader");
-    std::string compShaderStr = ReadFile("src/cs.shader");
+    std::string vertShaderStr = ReadFile("vs.shader");
+    std::string fragShaderStr = ReadFile("fr.shader");
+    std::string compShaderStr = ReadFile("cs.shader");
 
     
     unsigned int vs = CompileShader(vertShaderStr, GL_VERTEX_SHADER);

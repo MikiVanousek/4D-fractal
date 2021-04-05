@@ -1,0 +1,2 @@
+C:\Projects\4D-fractal\Debug\4D-fractal.exe
+C:\Projects\4D-fractal\Debug\4D-fractal.pdb

@@ -1,0 +1,28 @@
+﻿LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+main.obj : error LNK2019: unresolved external symbol __imp__glewInit@0 referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewBindBuffer referenced in function "void __cdecl setupBuffer(void)" (?setupBuffer@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewGenBuffers referenced in function "void __cdecl setupBuffer(void)" (?setupBuffer@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewAttachShader referenced in function "void __cdecl AttachShaders(void)" (?AttachShaders@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewCompileShader referenced in function "unsigned int __cdecl CompileShader(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?CompileShader@@YAIABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+main.obj : error LNK2019: unresolved external symbol __imp____glewCreateProgram referenced in function "void __cdecl AttachShaders(void)" (?AttachShaders@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewCreateShader referenced in function "unsigned int __cdecl CompileShader(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?CompileShader@@YAIABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+main.obj : error LNK2019: unresolved external symbol __imp____glewDeleteShader referenced in function "unsigned int __cdecl CompileShader(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?CompileShader@@YAIABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+main.obj : error LNK2019: unresolved external symbol __imp____glewGetShaderInfoLog referenced in function "unsigned int __cdecl CompileShader(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?CompileShader@@YAIABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+main.obj : error LNK2019: unresolved external symbol __imp____glewGetShaderiv referenced in function "unsigned int __cdecl CompileShader(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?CompileShader@@YAIABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+main.obj : error LNK2019: unresolved external symbol __imp____glewGetUniformLocation referenced in function "void __cdecl UpdateUniformArguments(void)" (?UpdateUniformArguments@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewLinkProgram referenced in function "void __cdecl AttachShaders(void)" (?AttachShaders@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewShaderSource referenced in function "unsigned int __cdecl CompileShader(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int)" (?CompileShader@@YAIABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@I@Z)
+main.obj : error LNK2019: unresolved external symbol __imp____glewUniform1i referenced in function "void __cdecl UpdateUniformArguments(void)" (?UpdateUniformArguments@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewUniform2f referenced in function "void __cdecl UpdateUniformArguments(void)" (?UpdateUniformArguments@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewUniform2i referenced in function "void __cdecl SetupUniformArguments(void)" (?SetupUniformArguments@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewUseProgram referenced in function "void __cdecl UpdateUniformArguments(void)" (?UpdateUniformArguments@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewValidateProgram referenced in function "void __cdecl AttachShaders(void)" (?AttachShaders@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewDispatchCompute referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewNamedBufferStorage referenced in function "void __cdecl setupBuffer(void)" (?setupBuffer@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewNamedBufferSubData referenced in function "void __cdecl updateBuffer(void)" (?updateBuffer@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewUniform1d referenced in function "void __cdecl UpdateUniformArguments(void)" (?UpdateUniformArguments@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewUniform4d referenced in function "void __cdecl UpdateUniformArguments(void)" (?UpdateUniformArguments@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewMemoryBarrier referenced in function _main
+main.obj : error LNK2019: unresolved external symbol __imp____glewBindBufferBase referenced in function "void __cdecl setupBuffer(void)" (?setupBuffer@@YAXXZ)
+main.obj : error LNK2019: unresolved external symbol __imp____glewGetIntegeri_v referenced in function "void __cdecl printInfo(void)" (?printInfo@@YAXXZ)
+C:\Projects\4D-fractal\Debug\4D-fractal.exe : fatal error LNK1120: 26 unresolved externals

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?><DEFECTS><DEFECT>
+    <SFA>
+      <FILEPATH>C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\</FILEPATH>
+      <FILENAME>main.cpp</FILENAME>
+      <LINE>31</LINE>
+      <COLUMN>0</COLUMN>
+    </SFA>
+    <DEFECTCODE>26495</DEFECTCODE>
+    <DESCRIPTION>Variable 'shader_data::data' is uninitialized. Always initialize a member variable (type.6).</DESCRIPTION>
+    <FUNCTION>shader_data::{ctor}</FUNCTION>
+    <DECORATED>??0shader_data@@QAE@XZ</DECORATED>
+    <FUNCLINE>31</FUNCLINE>
+    <ADDITIONALINFO>
+      <targetSymbol>shader_data::data</targetSymbol>
+    </ADDITIONALINFO>
+    <PATH></PATH>
+  </DEFECT><DEFECT>
+    <SFA>
+      <FILEPATH>C:\Projects\fractal-cpp\fractal-cpp\fractal-cpp\src\</FILEPATH>
+      <FILENAME>main.cpp</FILENAME>
+      <LINE>154</LINE>
+      <COLUMN>14</COLUMN>
+    </SFA>
+    <DEFECTCODE>6273</DEFECTCODE>
+    <DESCRIPTION>Non-integer passed as _Param_(2) when an integer is required in call to 'printf' Actual type: 'double':  if a pointer value is being passed, %p should be used.</DESCRIPTION>
+    <FUNCTION>KeyCallback</FUNCTION>
+    <DECORATED>?KeyCallback@@YAXPAUGLFWwindow@@HHHH@Z</DECORATED>
+    <FUNCLINE>103</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT></DEFECTS>
