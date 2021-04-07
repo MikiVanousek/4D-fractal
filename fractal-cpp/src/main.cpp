@@ -91,7 +91,7 @@ static void AttachShaders() {
     glAttachShader(mainProgram, vs);
     glAttachShader(mainProgram, fs);
     glAttachShader(computeProgram, cs);
-    
+     
     glLinkProgram(computeProgram);
     glValidateProgram(computeProgram);
 

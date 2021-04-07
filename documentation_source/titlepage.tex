@@ -1,0 +1,91 @@
+%%% Titulní strana práce a další povinné informační strany
+
+%%% Titulní strana práce
+
+\pagestyle{empty}
+\pagenumbering{gobble}
+\hypersetup{pageanchor=false}
+
+\begin{center}
+\LARGE
+\textbf{GYMNASIUM JANA KEPLERA}\\
+{\large Parléřova 2/118, 169 00 Praha 6}
+
+\vspace{\stretch{3}}
+
+\includegraphics[width=.3\textwidth]{img/logo}
+
+\vspace{\stretch{3}}
+
+{\Huge\bfseries\NazevPrace}
+
+\vspace{8mm}
+\mdseries{High school graduation thesis}
+
+\vspace{\stretch{8}}
+\large
+\begin{tabular}{rl}
+Author: & \AutorPrace \\
+\noalign{\vspace{2mm}}
+Class: & \Trida\\
+\noalign{\vspace{2mm}}
+School year: & 2020/2021\\
+\noalign{\vspace{2mm}}
+Subject: & Informatics \\
+\noalign{\vspace{2mm}}
+Thesis supervisor: & \Vedouci \\
+\end{tabular}
+
+\vspace{20mm}
+Prague, \DatumOdevzdani
+\end{center}
+
+
+\openright
+
+\includepdf[]{zadani.pdf}
+
+
+%%% Strana s čestným prohlášením k bakalářské práci
+
+\hypersetup{pageanchor=true}
+\cleardoublepage
+\vspace*{\fill}
+\section*{Authorship Declaration}
+\noindent
+\Prohlaseni
+
+\vspace{2cm}
+\noindent
+In Prague, \today
+\hspace*{\fill}\small{\AutorPrace}
+\vspace{1cm}
+
+%%% Poděkování
+\openright
+\vspace*{\fill}
+\section*{Acknowledgements}
+\noindent
+\Podekovani
+\vspace{1cm}
+
+
+%%% Povinná informační strana bakalářské práce
+\openright
+\section*{Abstrakt}
+\noindent
+\Abstrakt
+\subsection*{Klíčová slova}
+\noindent
+\KlicovaSlova
+
+\bigskip\bigskip\bigskip
+\section*{Abstract}
+\noindent
+\AbstraktEN
+\subsection*{Keywords}
+\noindent
+\KlicovaSlovaEN
+
+\openright
+\pagenumbering{arabic}

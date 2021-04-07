@@ -62,13 +62,21 @@
     <None Include="dependencies\glew\doc\install.html" />
     <None Include="dependencies\glew\doc\log.html" />
     <None Include="dependencies\glew\doc\wglew.html" />
-    <None Include="fractal-cpp\src\cs.shader" />
-    <None Include="fractal-cpp\src\fr.shader" />
-    <None Include="fractal-cpp\src\vs.shader" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="4D-fractal.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="fractal-cpp\src\cs.shader">
+      <Filter>Source Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="fractal-cpp\src\fr.shader">
+      <Filter>Source Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="fractal-cpp\src\vs.shader">
+      <Filter>Source Files</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
